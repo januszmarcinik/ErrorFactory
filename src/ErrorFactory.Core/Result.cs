@@ -1,42 +1,34 @@
-﻿namespace ErrorFactory.Core
+﻿using System.Net;
+
+namespace ErrorFactory.Core
 {
     public class Result
     {
-        protected Result(bool isSuccess, string message)
+        public Result(HttpStatusCode statusCode, string message = "")
         {
-            IsSuccess = isSuccess;
-            IsFailure = !isSuccess;
+            StatusCode = statusCode;
             Message = message;
         }
 
+        public HttpStatusCode StatusCode { get; }
+
         public string Message { get; }
 
-        public bool IsSuccess { get; }
-        
-        public bool IsFailure { get; }
-
-        public static Result Fail(string message)
-            => new Result(false, message);
-
-        public static Result<T> Fail<T>(string message)
-            => new Result<T>(false, message, default);
-
-        public static Result Ok()
-            => new Result(true, "");
-        
-        public static Result Ok(string message)
-            => new Result(true, message);
-
-        public static Result<T> Ok<T>(T value)
-            => new Result<T>(true, "", value);
+        public bool IsSuccess => (int)StatusCode >= 200 && (int)StatusCode <= 299;
     }
 
     public class Result<T> : Result
     {
-        internal Result(bool isSuccess, string message, T value)
-            : base(isSuccess, message)
+        public Result(HttpStatusCode statusCode, T value, string message = "")
+            : base(statusCode, message)
         {
             Value = value;
+        }
+        
+        public Result(HttpStatusCode statusCode, string message = "")
+            : base(statusCode, message)
+        {
+            Value = default;
         }
 
         public T Value { get; }

@@ -4,11 +4,11 @@ namespace ErrorFactory.Domain.Queries
 {
     public class GetSubjectByIdQuery : IQuery<Subject>
     {
-        public GetSubjectByIdQuery(string id)
+        public GetSubjectByIdQuery(int id)
         {
             Id = id;
         }
 
-        public string Id { get; }
+        public int Id { get; }
     }
 }

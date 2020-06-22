@@ -4,12 +4,12 @@ using ErrorFactory.Core.Mediator;
 
 namespace ErrorFactory.Domain.Commands
 {
-    public class AddSubjectCommandHandler : CommandHandlerBase<AddSubjectCommand, IErrors>
+    public class AddSubjectCommandHandler : CommandHandlerBase<AddSubjectCommand>
     {
         private readonly ISubjectsRepository _repository;
 
-        public AddSubjectCommandHandler(IErrorHandler<IErrors> errorHandler, ISubjectsRepository repository)
-            : base(errorHandler)
+        public AddSubjectCommandHandler(ErrorsFactory errorFactory, ISubjectsRepository repository)
+            : base(errorFactory)
         {
             _repository = repository;
         }
@@ -22,8 +22,15 @@ namespace ErrorFactory.Domain.Commands
 
             if (existedSubject != null)
             {
-                Errors.BadRequest()
+                return BadRequest(SubjectErrors.SubjectAlreadyExists(command.Name));
             }
+
+            var nextId = _repository.GetNextId();
+            var subject = new Subject(nextId, command.Name);
+            
+            _repository.Add(subject);
+
+            return Ok();
         }
     }
 }

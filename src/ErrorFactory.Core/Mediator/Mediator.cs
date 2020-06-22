@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Reflection;
 
 namespace ErrorFactory.Core.Mediator
 {
@@ -25,9 +25,9 @@ namespace ErrorFactory.Core.Mediator
 
         public Result<TResult> Query<TResult>(IQuery<TResult> query)
         {
+            // ReSharper disable once PossibleNullReferenceException
             return (Result<TResult>)GetType()
-                .GetMethods()
-                .First(x => x.Name == "Query" && x.GetGenericArguments().Length == 2)
+                .GetMethod("Query", BindingFlags.NonPublic | BindingFlags.Instance)
                 .MakeGenericMethod(query.GetType(), typeof(TResult))
                 .Invoke(this, new object[] { query });
         }
