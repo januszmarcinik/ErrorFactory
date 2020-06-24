@@ -1,18 +1,22 @@
 ﻿using System.Net;
+using ErrorFactory.Core;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace ErrorFactory.Core
+namespace ErrorFactory.Api
 {
-    public class ErrorsFactory
+    public class ErrorsFactory : IErrorsFactory
     {
         private readonly IConfiguration _configuration;
-        protected virtual string Lang => "en";
+        private readonly IHttpContextAccessor _contextAccessor;
+        private const string DefaultLanguage = "en";
 
-        public ErrorsFactory(IConfiguration configuration)
+        public ErrorsFactory(IConfiguration configuration, IHttpContextAccessor contextAccessor)
         {
             _configuration = configuration;
+            _contextAccessor = contextAccessor;
         }
-        
+
         public Result Create(HttpStatusCode statusCode, ErrorCode errorCode) => 
             new Result(statusCode, MakeMessage(errorCode));
 
@@ -21,12 +25,18 @@ namespace ErrorFactory.Core
 
         private string MakeMessage(ErrorCode errorCode)
         {
-            var messageFormat = _configuration[$"{errorCode.Code}:{Lang}"];
+            var language = ResolveLanguage();
+            var messageFormat = _configuration[$"{errorCode.Code}:{language}"];
             var message = string.IsNullOrWhiteSpace(messageFormat)
                 ? $"{errorCode.Code}: {string.Join(", ", errorCode.Parameters)}"
                 : string.Format(messageFormat, errorCode.Parameters);
 
             return message;
         }
+
+        private string ResolveLanguage() =>
+            _contextAccessor.HttpContext.Request.Headers.TryGetValue("Accept-Language", out var language)
+                ? (string) language
+                : DefaultLanguage;
     }
 }

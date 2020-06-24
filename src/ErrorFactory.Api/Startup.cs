@@ -29,7 +29,8 @@ namespace ErrorFactory.Api
                         new Subject(3, "Sztuczne sieci neuronowe"),
                         new Subject(4, "Wzorce projektowe")
                     }))
-                .AddTransient<ErrorsFactory>()
+                .AddHttpContextAccessor()
+                .AddTransient<IErrorsFactory, ErrorsFactory>()
                 .AddTransient<IMediator, Mediator>()
                 .AddTransient<IDependencyResolver, DependencyInjectionResolver>()
                 .AddTransient<ICommandHandler<AddSubjectCommand>, AddSubjectCommandHandler>()
@@ -40,7 +41,7 @@ namespace ErrorFactory.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseRouting();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

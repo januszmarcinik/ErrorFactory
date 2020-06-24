@@ -5,9 +5,9 @@ namespace ErrorFactory.Core.Mediator
     public abstract class QueryHandlerBase<TQuery, TResult> : IQueryHandler<TQuery, TResult>
         where TQuery : IQuery<TResult>
     {
-        private readonly ErrorsFactory _errorsFactory;
+        private readonly IErrorsFactory _errorsFactory;
 
-        protected QueryHandlerBase(ErrorsFactory errorsFactory)
+        protected QueryHandlerBase(IErrorsFactory errorsFactory)
         {
             _errorsFactory = errorsFactory;
         }

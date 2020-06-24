@@ -8,7 +8,7 @@ namespace ErrorFactory.Domain.Commands
     {
         private readonly ISubjectsRepository _repository;
 
-        public AddSubjectCommandHandler(ErrorsFactory errorFactory, ISubjectsRepository repository)
+        public AddSubjectCommandHandler(IErrorsFactory errorFactory, ISubjectsRepository repository)
             : base(errorFactory)
         {
             _repository = repository;

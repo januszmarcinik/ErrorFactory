@@ -5,9 +5,9 @@ namespace ErrorFactory.Core.Mediator
     public abstract class CommandHandlerBase<TCommand> : ICommandHandler<TCommand>
         where TCommand : ICommand
     {
-        private readonly ErrorsFactory _errorsFactory;
+        private readonly IErrorsFactory _errorsFactory;
 
-        protected CommandHandlerBase(ErrorsFactory errorsFactory)
+        protected CommandHandlerBase(IErrorsFactory errorsFactory)
         {
             _errorsFactory = errorsFactory;
         }

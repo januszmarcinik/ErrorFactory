@@ -8,7 +8,7 @@ namespace ErrorFactory.Domain.Queries
     {
         private readonly ISubjectsRepository _repository;
 
-        public GetSubjectsQueryHandler(ErrorsFactory errorsFactory, ISubjectsRepository repository) 
+        public GetSubjectsQueryHandler(IErrorsFactory errorsFactory, ISubjectsRepository repository) 
             : base(errorsFactory)
         {
             _repository = repository;

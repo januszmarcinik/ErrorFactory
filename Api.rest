@@ -4,7 +4,8 @@
 GET {{api_url}}
 
 ### Get subject by ID
-GET {{api_url}}/1
+GET {{api_url}}/5
+Accept-Language: pl
 
 ### Create team member
 # @name createTeamMember
