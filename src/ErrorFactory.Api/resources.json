@@ -6,5 +6,9 @@
   "SubjectDoesNotExists": {
     "en": "Subject with id {Id} does not exist.",
     "pl": "Przedmiot o id {Id} nie istnieje."
+  },
+  "UnhandledException": {
+    "en": "Unhandled exception occurred. Please check logs for more details.",
+    "pl": "Wystąpił niespodziewany błąd aplikacji. Proszę sprawdzić logi w celu odczytania szczegółów."
   }
 }

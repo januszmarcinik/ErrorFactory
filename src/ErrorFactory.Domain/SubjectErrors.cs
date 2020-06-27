@@ -5,7 +5,7 @@ namespace ErrorFactory.Domain
     public static class SubjectErrors
     {
         public static ErrorCode SubjectAlreadyExists(string name) => 
-            new ErrorCode("SubjectAlreadyExist", new
+            new ErrorCode("SubjectAlreadyExists", new
             {
                 Name = name
             });
@@ -15,5 +15,8 @@ namespace ErrorFactory.Domain
             {
                 Id = id
             });
+        
+        public static ErrorCode SubjectsListIsEmpty() => 
+            new ErrorCode("SubjectsListIsEmpty", new {});
     }
 }

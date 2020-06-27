@@ -24,7 +24,7 @@ namespace ErrorFactory.Domain
                 .DefaultIfEmpty(0)
                 .Max(x => x) + 1;
 
-        public void Add(Subject subject) =>
+        public void Add(Subject subject) => 
             _subjects.Add(subject);
 
         public void Remove(int id) => 

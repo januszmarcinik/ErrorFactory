@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Text;
 using ErrorFactory.Core;
@@ -33,8 +34,21 @@ namespace ErrorFactory.Api.Errors
             return Result<T>.Failure(statusCode, message);
         }
 
-        private string GetMessageFormat(string errorCode, string language) =>
-            _configuration[$"{errorCode}:{language}"];
+        private string GetMessageFormat(string errorCode, string language)
+        {
+            var messageFormat = _configuration[$"{errorCode}:{language}"];
+            if (string.IsNullOrEmpty(messageFormat) && language != DefaultLanguage)
+            {
+                messageFormat = _configuration[$"{errorCode}:{DefaultLanguage}"];
+            }
+
+            if (string.IsNullOrEmpty(messageFormat))
+            {
+                throw new NotImplementedException($"Message format for error code [{errorCode}] was not implemented.");
+            }
+
+            return messageFormat;
+        }
 
         private static string FormatMessage(string messageFormat, ErrorCode errorCode)
         {
@@ -42,7 +56,7 @@ namespace ErrorFactory.Api.Errors
                 .GetType()
                 .GetProperties()
                 .ToDictionary(key => $"{{{key.Name}}}", value => value.GetValue(errorCode.Parameters));
-            
+
             var sb = new StringBuilder(messageFormat);
             foreach (var (key, value) in parameters)
             {

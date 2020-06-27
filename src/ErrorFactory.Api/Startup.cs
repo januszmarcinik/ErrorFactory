@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ErrorFactory.Api.Errors;
+using ErrorFactory.Api.Middleware;
 using ErrorFactory.Core;
 using ErrorFactory.Core.Mediator;
 using ErrorFactory.Domain;
@@ -42,6 +43,7 @@ namespace ErrorFactory.Api
                 .AddTransient<IMediator, Mediator>()
                 .AddTransient<IDependencyResolver, DependencyInjectionResolver>()
                 .AddTransient<ICommandHandler<AddSubjectCommand>, AddSubjectCommandHandler>()
+                .AddTransient<ICommandHandler<RemoveSubjectCommand>, RemoveSubjectCommandHandler>()
                 .AddTransient<IQueryHandler<GetSubjectByIdQuery, Subject>, GetSubjectByIdQueryHandler>()
                 .AddTransient<IQueryHandler<GetSubjectsQuery, IEnumerable<Subject>>, GetSubjectsQueryHandler>();
         }
@@ -49,6 +51,7 @@ namespace ErrorFactory.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseRouting();
+            app.UseErrorHandlerMiddleware();
 
             app.UseEndpoints(endpoints =>
             {
