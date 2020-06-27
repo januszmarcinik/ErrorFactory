@@ -1,10 +1,10 @@
 ﻿{
   "SubjectAlreadyExists": {
-    "en": "Subject with name {0} already exists.",
-    "pl": "Przedmiot o nazwie {0} już istnieje."
+    "en": "Subject with name {Name} already exists.",
+    "pl": "Przedmiot o nazwie {Name} już istnieje."
   },
   "SubjectDoesNotExists": {
-    "en": "Subject with id {0} does not exist.",
-    "pl": "Przedmiot o id {0} nie istnieje."
+    "en": "Subject with id {Id} does not exist.",
+    "pl": "Przedmiot o id {Id} nie istnieje."
   }
 }

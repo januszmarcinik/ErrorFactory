@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
+using System.Text;
 using ErrorFactory.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -30,17 +32,24 @@ namespace ErrorFactory.Api.Errors
             var message = FormatMessage(messageFormat, errorCode);
             return Result<T>.Failure(statusCode, message);
         }
-        
+
         private string GetMessageFormat(string errorCode, string language) =>
             _configuration[$"{errorCode}:{language}"];
 
         private static string FormatMessage(string messageFormat, ErrorCode errorCode)
         {
-            var message = string.IsNullOrWhiteSpace(messageFormat)
-                ? $"{errorCode.Code}: {string.Join(", ", errorCode.Parameters)}"
-                : string.Format(messageFormat, errorCode.Parameters);
+            var parameters = errorCode.Parameters
+                .GetType()
+                .GetProperties()
+                .ToDictionary(key => $"{{{key.Name}}}", value => value.GetValue(errorCode.Parameters));
+            
+            var sb = new StringBuilder(messageFormat);
+            foreach (var (key, value) in parameters)
+            {
+                sb.Replace(key, value != null ? value.ToString() : "");
+            }
 
-            return message;
+            return sb.ToString();
         }
 
         private string ResolveLanguage() =>

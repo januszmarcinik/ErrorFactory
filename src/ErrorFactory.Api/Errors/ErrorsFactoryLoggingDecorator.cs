@@ -28,7 +28,7 @@ namespace ErrorFactory.Api.Errors
 
         private void LogError(HttpStatusCode statusCode, ErrorCode errorCode) =>
             _logger.LogError(
-                "Error {0} occurred with status code {1} and parameters: {2}", 
+                "Error {0} occurred with status code {1} and parameters: {@2}", 
                 errorCode.Code, 
                 statusCode, 
                 errorCode.Parameters);
