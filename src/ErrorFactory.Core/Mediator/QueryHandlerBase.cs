@@ -15,18 +15,18 @@ namespace ErrorFactory.Core.Mediator
         public abstract Result<TResult> Handle(TQuery query);
 
         protected Result<TResult> Ok(TResult value) =>
-            new Result<TResult>(HttpStatusCode.OK, value);
+            Result<TResult>.Success(HttpStatusCode.OK, value);
 
         protected Result<TResult> BadRequest(ErrorCode errorCode) =>
             _errorsFactory.Create<TResult>(HttpStatusCode.BadRequest, errorCode);
-        
-        public Result<TResult> NotFound(ErrorCode errorCode) => 
+
+        protected Result<TResult> NotFound(ErrorCode errorCode) => 
             _errorsFactory.Create<TResult>(HttpStatusCode.NotFound, errorCode);
-        
-        public Result<TResult> Forbidden(ErrorCode errorCode) => 
+
+        protected Result<TResult> Forbidden(ErrorCode errorCode) => 
             _errorsFactory.Create<TResult>(HttpStatusCode.Forbidden, errorCode);
 
-        public Result<TResult> InternalServerError(ErrorCode errorCode) => 
+        protected Result<TResult> InternalServerError(ErrorCode errorCode) => 
             _errorsFactory.Create<TResult>(HttpStatusCode.InternalServerError, errorCode);
     }
 }

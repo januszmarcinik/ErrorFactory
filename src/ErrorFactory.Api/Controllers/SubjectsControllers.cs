@@ -29,12 +29,9 @@ namespace ErrorFactory.Api.Controllers
             return FromResult(result);
         }
         
-        private IActionResult FromResult(Result result) =>
-            StatusCode((int) result.StatusCode, result.Message);
-        
         private IActionResult FromResult<T>(Result<T> result) =>
             result.IsSuccess
                 ? StatusCode((int) result.StatusCode, result.Value)
-                : StatusCode((int) result.StatusCode, result.Message);
+                : StatusCode((int) result.StatusCode, result.ErrorMessage);
     }
 }

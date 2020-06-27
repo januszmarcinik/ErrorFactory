@@ -3,7 +3,7 @@ using ErrorFactory.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace ErrorFactory.Api
+namespace ErrorFactory.Api.Errors
 {
     public class ErrorsFactory : IErrorsFactory
     {
@@ -17,16 +17,25 @@ namespace ErrorFactory.Api
             _contextAccessor = contextAccessor;
         }
 
-        public Result Create(HttpStatusCode statusCode, ErrorCode errorCode) => 
-            new Result(statusCode, MakeMessage(errorCode));
+        public Result Create(HttpStatusCode statusCode, ErrorCode errorCode)
+        {
+            var result = Create<string>(statusCode, errorCode);
+            return Result.Failure(statusCode, result.ErrorMessage);
+        }
 
-        public Result<T> Create<T>(HttpStatusCode statusCode, ErrorCode errorCode, T value = default) => 
-            new Result<T>(statusCode, value, MakeMessage(errorCode));
-
-        private string MakeMessage(ErrorCode errorCode)
+        public Result<T> Create<T>(HttpStatusCode statusCode, ErrorCode errorCode)
         {
             var language = ResolveLanguage();
-            var messageFormat = _configuration[$"{errorCode.Code}:{language}"];
+            var messageFormat = GetMessageFormat(errorCode.Code, language);
+            var message = FormatMessage(messageFormat, errorCode);
+            return Result<T>.Failure(statusCode, message);
+        }
+        
+        private string GetMessageFormat(string errorCode, string language) =>
+            _configuration[$"{errorCode}:{language}"];
+
+        private static string FormatMessage(string messageFormat, ErrorCode errorCode)
+        {
             var message = string.IsNullOrWhiteSpace(messageFormat)
                 ? $"{errorCode.Code}: {string.Join(", ", errorCode.Parameters)}"
                 : string.Format(messageFormat, errorCode.Parameters);

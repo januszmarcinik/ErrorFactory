@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ErrorFactory.Api.Errors;
 using ErrorFactory.Core;
 using ErrorFactory.Core.Mediator;
 using ErrorFactory.Domain;
@@ -7,6 +8,7 @@ using ErrorFactory.Domain.Queries;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 
 namespace ErrorFactory.Api
@@ -30,7 +32,13 @@ namespace ErrorFactory.Api
                         new Subject(4, "Wzorce projektowe")
                     }))
                 .AddHttpContextAccessor()
-                .AddTransient<IErrorsFactory, ErrorsFactory>()
+                .AddTransient<ErrorsFactory>()
+                .AddTransient<IErrorsFactory>(provider =>
+                {
+                    var errorsFactory = provider.GetService<ErrorsFactory>();
+                    var logger = provider.GetService<ILogger<IErrorsFactory>>();
+                    return new ErrorsFactoryLoggingDecorator(errorsFactory, logger);
+                })
                 .AddTransient<IMediator, Mediator>()
                 .AddTransient<IDependencyResolver, DependencyInjectionResolver>()
                 .AddTransient<ICommandHandler<AddSubjectCommand>, AddSubjectCommandHandler>()

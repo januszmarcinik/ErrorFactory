@@ -6,6 +6,6 @@ namespace ErrorFactory.Core
     {
         Result Create(HttpStatusCode statusCode, ErrorCode errorCode);
 
-        Result<T> Create<T>(HttpStatusCode statusCode, ErrorCode errorCode, T value = default); 
+        Result<T> Create<T>(HttpStatusCode statusCode, ErrorCode errorCode);
     }
 }

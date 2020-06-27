@@ -2,35 +2,42 @@
 
 namespace ErrorFactory.Core
 {
-    public class Result
+    public class Result : Result<string>
     {
-        public Result(HttpStatusCode statusCode, string message = "")
+        private Result(bool isSuccess, HttpStatusCode statusCode, string value, string errorMessage) 
+            : base(isSuccess, statusCode, value, errorMessage)
         {
-            StatusCode = statusCode;
-            Message = message;
-        }
-
-        public HttpStatusCode StatusCode { get; }
-
-        public string Message { get; }
-
-        public bool IsSuccess => (int)StatusCode >= 200 && (int)StatusCode <= 299;
-    }
-
-    public class Result<T> : Result
-    {
-        public Result(HttpStatusCode statusCode, T value, string message = "")
-            : base(statusCode, message)
-        {
-            Value = value;
         }
         
-        public Result(HttpStatusCode statusCode, string message = "")
-            : base(statusCode, message)
+        public new static Result Success(HttpStatusCode statusCode, string value) => 
+            new Result(true, statusCode, value, "");
+        
+        public new static Result Failure(HttpStatusCode statusCode, string errorMessage) =>
+            new Result(false, statusCode, default, errorMessage);
+    }
+
+    public class Result<T>
+    {
+        protected Result(bool isSuccess, HttpStatusCode statusCode, T value, string errorMessage)
         {
-            Value = default;
+            IsSuccess = isSuccess;
+            StatusCode = statusCode;
+            Value = value;
+            ErrorMessage = errorMessage;
         }
+        
+        public HttpStatusCode StatusCode { get; }
+
+        public string ErrorMessage { get; }
+
+        public bool IsSuccess { get; }
 
         public T Value { get; }
+
+        public static Result<T> Success(HttpStatusCode statusCode, T value) => 
+            new Result<T>(true, statusCode, value, "");
+        
+        public static Result<T> Failure(HttpStatusCode statusCode, string errorMessage) =>
+            new Result<T>(false, statusCode, default, errorMessage);
     }
 }

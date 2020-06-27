@@ -14,19 +14,19 @@ namespace ErrorFactory.Core.Mediator
         
         public abstract Result Handle(TCommand command);
 
-        protected Result Ok(string message = "") =>
-            new Result(HttpStatusCode.OK, message);
+        protected Result Ok(string value = "") =>
+            Result.Success(HttpStatusCode.OK, value);
 
         protected Result BadRequest(ErrorCode errorCode) =>
             _errorsFactory.Create(HttpStatusCode.BadRequest, errorCode);
-        
-        public Result NotFound(ErrorCode errorCode) => 
+
+        protected Result NotFound(ErrorCode errorCode) => 
             _errorsFactory.Create(HttpStatusCode.NotFound, errorCode);
-        
-        public Result Forbidden(ErrorCode errorCode) => 
+
+        protected Result Forbidden(ErrorCode errorCode) => 
             _errorsFactory.Create(HttpStatusCode.Forbidden, errorCode);
 
-        public Result InternalServerError(ErrorCode errorCode) => 
+        protected Result InternalServerError(ErrorCode errorCode) => 
             _errorsFactory.Create(HttpStatusCode.InternalServerError, errorCode);
     }
 }
