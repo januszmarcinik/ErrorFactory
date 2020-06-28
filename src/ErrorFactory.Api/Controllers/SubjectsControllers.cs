@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ErrorFactory.Api.Controllers
 {
-    [Route("subjects")]
+    [Route("")]
     public class SubjectsControllers : ControllerBase
     {
         private readonly IMediator _mediator;
