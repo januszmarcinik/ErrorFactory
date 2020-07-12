@@ -1,22 +1,21 @@
-@api_url = http://localhost:5000/subjects
+@api_url = http://localhost:5000/
+//@api_url = https://design-patterns-55320.azurewebsites.net/
 
 ### Get all subjects
 GET {{api_url}}
 
 ### Get subject by ID
-GET {{api_url}}/5
+GET {{api_url}}/6
 Accept-Language: pl
 
-### Create team member
-# @name createTeamMember
-POST {{api_url}}/api/team-members HTTP/1.1
+### Create subject
+POST {{api_url}} HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "Damian",
-    "role": "1",
-    "grade": "1"
+    "name": "Systemy autonomiczne"
 }
 
-### Delete team member
-DELETE {{api_url}}/api/team-members/cea26791-948f-4b2d-99a3-328eb6941f81 HTTP/1.1
+### Delete subject
+DELETE {{api_url}}/4 HTTP/1.1
+Accept-Language: de

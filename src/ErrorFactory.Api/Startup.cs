@@ -24,14 +24,7 @@ namespace ErrorFactory.Api
                         new CamelCasePropertyNamesContractResolver());
 
             services
-                .AddSingleton<ISubjectsRepository, SubjectsRepository>(x =>
-                    new SubjectsRepository(new[]
-                    {
-                        new Subject(1, "Inżynieria systemów informatycznych"),
-                        new Subject(2, "Metody wytwarzania oprogramowania"),
-                        new Subject(3, "Sztuczne sieci neuronowe"),
-                        new Subject(4, "Wzorce projektowe")
-                    }))
+                .AddSingleton<ISubjectsRepository>(x => SubjectsRepositorySingleton.GetInstance())
                 .AddHttpContextAccessor()
                 .AddTransient<ErrorsFactory>()
                 .AddTransient<IErrorsFactory>(provider =>
